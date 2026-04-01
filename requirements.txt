@@ -1,0 +1,2 @@
+tiktoken
+psycopg2-binary
