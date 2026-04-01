@@ -2,6 +2,8 @@
 
 A text cleaning and sentence-boundary chunking pipeline built for Greek legal documents. Designed to prepare court rulings for embedding and vector search — but the approach generalises to any formal legal corpus.
 
+> `cleaner.py` and `chunker.py` are fully self-contained modules with no external dependencies beyond `tiktoken`. Drop them into any project.
+
 ---
 
 ## The Problem with Naive Chunking
@@ -32,7 +34,7 @@ The solution is to split on **sentence boundaries** instead — keep each senten
 
 ## How It Works
 
-The pipeline runs in two stages: **clean** then **chunk**. `pipeline.py` orchestrates both against a Postgres database of cases.
+The pipeline runs in two stages: **clean** then **chunk**.
 
 ### Stage 1 — Cleaning (`cleaner.py`)
 
@@ -79,16 +81,6 @@ Token limits:
     "text":        str,    # the chunk text
     "token_count": int,    # pre-computed token count
 }
-```
-
----
-
-### Stage 3 — Orchestration (`pipeline.py`)
-
-Pulls all cases from Postgres that have not yet been chunked, runs clean → chunk on each, and bulk inserts the results into the `chunks` table. Idempotent — safe to re-run, will only process new cases.
-
-```bash
-python pipeline/pipeline.py
 ```
 
 ---
